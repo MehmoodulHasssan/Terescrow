@@ -231,7 +231,7 @@ export const readAllMessagesControllers = async (
   next: NextFunction
 ) => {
   try {
-    const { _user, chatId }: { _user: User; chatId: number } = req.body;
+    const { _user, chatId }: { _user: User; chatId: string } = req.body;
 
     if (!_user || !chatId) {
       return next(ApiError.unauthorized('You are not authorized'));
@@ -239,7 +239,7 @@ export const readAllMessagesControllers = async (
 
     const messages = await prisma.message.updateMany({
       where: {
-        chatId,
+        chatId: +chatId,
       },
       data: {
         isRead: true,

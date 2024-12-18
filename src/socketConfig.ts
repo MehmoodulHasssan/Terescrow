@@ -20,7 +20,7 @@ const io = new Server(httpServer, {
 });
 
 let onlineAgents: {
-  agentId: number;
+  userId: number;
   socketId: string;
   assignedDepartments: { id: number }[];
 }[] = [];
@@ -101,7 +101,7 @@ io.on('connection', async (socket) => {
           if (res) {
             // console.log('new agent:', res.assignedDepartments);
             onlineAgents.push({
-              agentId: userId,
+              userId: userId,
               socketId: socket.id,
               assignedDepartments: res.assignedDepartments,
             });
@@ -201,7 +201,7 @@ io.on('connection', async (socket) => {
             );
             if (availableAgents.length > 0) {
               const newChat = await createCustomerToAgentChat(
-                availableAgents[0].agentId,
+                availableAgents[0].userId,
                 userId,
                 Number(data.departmentId),
                 Number(data.categoryId)
@@ -262,14 +262,14 @@ const getCustomerSocketId = (customerId: number) => {
 };
 
 const getAgentSocketId = (agentId: number) => {
-  const agent = onlineAgents.find((agent) => agent.agentId == agentId);
+  const agent = onlineAgents.find((agent) => agent.userId === agentId);
   console.log(agent);
   if (agent) return agent.socketId;
   return '';
 };
 
 const getAgentOrAdminSocketId = (userId: number) => {
-  const user = onlineAgents.find((agent) => agent.agentId == userId);
+  const user = onlineAgents.find((agent) => agent.userId == userId);
   if (user) return user.socketId;
   if (isAdminOnline) {
     if (isAdminOnline.userId == userId) return isAdminOnline.socketId;
