@@ -34,8 +34,6 @@ app.use(cookie());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 //routes
-app.use(bodyParser.json({ limit: '5mb' }));
-app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 app.use('/api/auth', authRouter);
 app.use('/api/customer', customerRouter);
 app.use('/api/customer/utilities', customerUtilityrouter);
